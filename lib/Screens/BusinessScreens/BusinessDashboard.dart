@@ -5,6 +5,7 @@ import 'package:swap/Screens/BusinessScreens/ChatPage.dart';
 import 'package:swap/Screens/BusinessScreens/MyPosts.dart';
 import 'package:swap/Screens/BusinessScreens/Wallet.dart';
 import 'package:swap/Screens/BusinessScreens/AddItems.dart';
+import 'package:swap/Screens/BusinessScreens/ShopRoutine.dart';
 import 'package:swap/Screens/Cart.dart';
 import 'package:swap/Screens/donate.dart';
 import 'package:swap/Screens/fresh_sale.dart';
@@ -286,6 +287,28 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
                       Image.asset("assets/support.png", fit: BoxFit.cover),
                 ),
                 title: Text("Support"),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ShoppingRoutine()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: ListTile(
+                leading: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: 30,
+                    maxHeight: 30,
+                  ),
+                  child:
+                      Icon(Icons.shop, color: Colors.blue)
+                ),
+                title: Text("Shop Details"),
               ),
             ),
           ),
