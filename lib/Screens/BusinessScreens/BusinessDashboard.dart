@@ -6,11 +6,14 @@ import 'package:swap/Screens/BusinessScreens/MyPosts.dart';
 import 'package:swap/Screens/BusinessScreens/Wallet.dart';
 import 'package:swap/Screens/BusinessScreens/AddItems.dart';
 import 'package:swap/Screens/BusinessScreens/ShopRoutine.dart';
+import 'package:swap/Screens/BusinessScreens/BusinessFlashSale.dart';
+import 'package:swap/Widgets/CategoriesList.dart';
 import 'package:swap/Screens/Cart.dart';
 import 'package:swap/Screens/donate.dart';
 import 'package:swap/Screens/fresh_sale.dart';
 import 'package:swap/SplashScreen.dart';
 import 'package:swap/Models/DataSchema.dart';
+import 'BusinessEditProfile.dart';
 class BusinessDashboard extends StatefulWidget {
   @override
   _BusinessDashboardState createState() => _BusinessDashboardState();
@@ -18,7 +21,7 @@ class BusinessDashboard extends StatefulWidget {
 
 class _BusinessDashboardState extends State<BusinessDashboard> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  int itemCount =5;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,6 +104,7 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
             //                     //_imgFromGallery();
             //                     Navigator.of(context).pop();
             //                   }),
+            // 
             //               new ListTile(
             //                 //leading: new Icon(Icons.photo_camera),
             //                 title: new Text('Flash Sale'),
@@ -154,7 +158,24 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
               ),
             ),
           ),
-
+            InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>BusinessEditProfile()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 0,0),
+              child: ListTile(
+                leading: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: 30,
+                    maxHeight: 30,
+                  ),
+                  child: Icon(Icons.mode_edit),
+                ),
+                title: Text("Edit Profile"),
+              ),
+            ),
+          ),
           InkWell(
             onTap: () {
               Navigator.push(
@@ -370,19 +391,54 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
           ),
         ),
         title: Text("Dashboard", style: TextStyle(color: Colors.black)),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {
-        //
-        //     },
-        //     icon: Icon(Icons.search),
-        //     tooltip: 'Search',
-        //     color: Colors.black,
-        //     iconSize: 30,
-        //   ),
-        // ],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: new Container(
+              height: 150.0,
+              width: 30.0,
+              child: new GestureDetector(
+                onTap: () {
+                },
+                child: Stack(
+                  children: <Widget>[
+                    new IconButton(
+                        icon: new Icon(
+                          Icons.shopping_cart,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+
+                        }),
+                    itemCount == 0
+                        ? new Container()
+                        : new Positioned(
+                            child: new Stack(
+                            children: <Widget>[
+                              new Icon(Icons.brightness_1,
+                                  size: 20.0, color: Colors.orange.shade500),
+                              new Positioned(
+                                  top: 4.0,
+                                  right: 5.0,
+                                  child: new Center(
+                                    child: new Text(
+                                      itemCount.toString(),
+                                      style: new TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11.0,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  )),
+                            ],
+                          )),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
       ),
-      body: FreshSale()
+      body: BusinessFlashSale()
       // Column(
       //   children: [
       //     SizedBox(

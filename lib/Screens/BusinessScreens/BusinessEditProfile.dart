@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'LocationChanger.dart';
+import 'BusinessLocationChanger.dart';
 import 'package:geolocator/geolocator.dart';
 //import 'package:location/location.dart';
 
-class EditProfile extends StatefulWidget {
+class BusinessEditProfile extends StatefulWidget {
   @override
   _EditPostState createState() => _EditPostState();
 }
 Position currentLocation;
-class _EditPostState extends State<EditProfile> with TickerProviderStateMixin {
+class _EditPostState extends State<BusinessEditProfile> with TickerProviderStateMixin {
 
   AnimationController _animationController;
   File tempImage;
@@ -214,6 +214,39 @@ class _EditPostState extends State<EditProfile> with TickerProviderStateMixin {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   hintText:"Change Name",
+                  errorMaxLines: 3,                      
+                  hintStyle: TextStyle(
+                      color: Colors.black54,
+                      fontSize: size.height*0.02),                        
+                )),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            height: MediaQuery.of(context).size.height * 0.07,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.black54)),
+            child: TextFormField(
+                validator: (val) {
+                  setState(() {
+                    //val.isEmpty ? error = true : error = false;
+                  });
+                  return null;
+                },
+                onTap: () {
+                  setState(() {
+                   
+                  });
+                },
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(0),
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  hintText:"Add Delivery Cost",
                   errorMaxLines: 3,                      
                   hintStyle: TextStyle(
                       color: Colors.black54,

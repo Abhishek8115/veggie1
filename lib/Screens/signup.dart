@@ -1,96 +1,112 @@
-import 'dart:convert' ;
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:swap/Screens/phoneVerificationScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
 import 'package:swap/global.dart';
+
 class SignUp extends StatefulWidget {
   final Function() updateParent;
   SignUp({this.updateParent});
   @override
   _SignUpState createState() => _SignUpState();
 }
+
 Size size;
- 
-class _SignUpState extends State<SignUp> with TickerProviderStateMixin{
+  String userId;
+class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
+
+
   AnimationController _animationController;
   //int selectedIndex = -1;
-  Future<String> pushData(
-    
-      String name, String email, String password, String phoneNo, int sIndex) async {
-    String res = jsonEncode({
-              	"name": "name", 
-                "email": "abhitod7fewfewf66@gmail.com", 
-                "password": "password",
-                "contactNumber": "9352314227",
-                "userType": sIndex==0?"business":"individual"
-            }).toString();
-    print(res);
-    sIndex==0?print("Business"):print("Individual");
+  Future<http.Response> pushData(String name, String email, String password,
+      String phoneNo, int sIndex) async {
+    // String res = jsonEncode({
+    //   "name": "name",
+    //   "email": "abhitod7fewfewf66@gmail.com",
+    //   "password": "password",
+    //   "contactNumber": "93523142217",
+    //   "role": sIndex == 0? 'business':'user'
+    // }).toString();
+    // print(res);
+    sIndex == 0? 'business':'user';
     showGeneralDialog(
-              barrierColor: Colors.black.withOpacity(0.5),
-              transitionBuilder: (context, a1, a2, widget) {
-                return Transform.scale(
-                  scale: a1.value,
-                  child: Opacity(
-                    opacity: a1.value,
-                    child: AlertDialog(
-                    title:Row(
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionBuilder: (context, a1, a2, widget) {
+          return Transform.scale(
+            scale: a1.value,
+            child: Opacity(
+              opacity: a1.value,
+              child: AlertDialog(
+                  title: Row(
                       //mainAxisAlignment: MainAxisAlignment.center,
-                      children:<Widget>[
-                        CircularProgressIndicator(
-                          backgroundColor: Colors.indigo, 
-                          valueColor: _animationController.drive(ColorTween(begin: Colors.indigo, end: Colors.deepPurple[100])),                  
-                          strokeWidth: 6.0,
-                        ),
-                        SizedBox(width: size.width*0.1),
-                        Text("Loading")
-                      ]
-                    )
-                  ),
-                  ),
-                );
-              },
-              transitionDuration: Duration(milliseconds: 300),
-              barrierDismissible: false,
-              barrierLabel: '',
-              context: context,
-              pageBuilder: (context, animation1, animation2) {});
-    final response = await http.post(
-        'https://foodswap-backend.herokuapp.com/signup',
-        headers: {"Content-Type": "application/json"},
-        body:jsonEncode({
-              	"name": "name", 
-                "email": "abhitod766@gmail.com", 
-                "password": "password",
-                "contactNumber": "9358114227",
-                "userType": sIndex==0?"business":"individual"
-            }));
-    Navigator.pop(context);
+                      children: <Widget>[
+                    CircularProgressIndicator(
+                      backgroundColor: Colors.indigo,
+                      valueColor: _animationController.drive(ColorTween(
+                          begin: Colors.indigo, end: Colors.deepPurple[100])),
+                      strokeWidth: 6.0,
+                    ),
+                    SizedBox(width: size.width * 0.1),
+                    Text("Loading")
+                  ])),
+            ),
+          );
+        },
+        transitionDuration: Duration(milliseconds: 300),
+        barrierDismissible: false,
+        barrierLabel: '',
+        context: context,
+        pageBuilder: (context, animation1, animation2) {});
+        String resp = jsonEncode({
+                  "email": "b7ffd6@gmail.com",
+                  "phone": "4213227",
+                  "password": "password",
+                  "name": "abhishek" ,                
+                  "role": sIndex == 0? 'business':'user'
+                });
+        print(resp);
+        final response =
+            await http.post('https://food2swap.herokuapp.com/api/auth/register',
+                headers: {
+                  "Content-Type": "application/json"
+                  },
+                body: jsonEncode({
+                  "email": "ffd6@gmail.com",
+                  "phone": "3227",
+                  "password": "password",
+                  "name": "abhishek" ,                
+                  "role": sIndex == 0? 'business':'user'
+                }));
+    //Navigator.pop(context);
+    //String signUpDetails = 
     print('response: ${response.statusCode}');
     if (response.statusCode == 200) {
-      return "success!";
-    } else if (response.statusCode == 400) {
+      return response;
+    } 
+    else {
       print(response.statusCode);
-      return "failure";
+      return response;
     }
-    return 'error';
   }
-   @override
+
+  @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     //_razorpay.clear(); // Removes all listeners
     _animationController.dispose();
   }
+
   @override
   void initState() {
     super.initState();
+    selectedIndex = 0;
     _animationController =
         AnimationController(duration: new Duration(seconds: 2), vsync: this);
     _animationController.repeat();
   }
- 
+
   bool error = false;
 
   TextEditingController name = TextEditingController();
@@ -257,6 +273,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin{
               ),
               child: TextField(
                   obscureText: true,
+                  //focusNode: FocusNode(skipTraversal :true),
                   controller: password,
                   cursorColor: Color(0xff90E5BF),
                   decoration: InputDecoration(
@@ -281,7 +298,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin{
             padding: EdgeInsets.all(10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(3, (index) {
+              children: List.generate(2, (index) {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
@@ -297,74 +314,118 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin{
                       SizedBox(
                         width: 10,
                       ),
-                      Text(index == 0 ? 'Business Owner' : index == 1 ?'User': 'NGO')
+                      Text(index == 0
+                          ? 'business' : 'user')
                     ],
                   ),
                 );
               }),
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            height: MediaQuery.of(context).size.height * 0.25,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Color(0xff62319E))),
-            child: TextFormField(
-                validator: (val) {
-                  setState(() {
-                    val.isEmpty ? error = true : error = false;
-                  });
-                  return null;
-                },
-                onTap: () {
-                  setState(() {
-                    error = false;
-                  });
-                },
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(10),
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  hintText:
-                      error ? "Description can't be empty" : "Description",
-                  errorMaxLines: 3,
-                  hintStyle: TextStyle(
-                      color:
-                          error ? Colors.deepOrangeAccent : Color(0xff62319E)),
-                )),
-          ),
+          // Container(
+          //   padding: EdgeInsets.symmetric(horizontal: 10),
+          //   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          //   height: MediaQuery.of(context).size.height * 0.25,
+          //   decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(20),
+          //       border: Border.all(color: Color(0xff62319E))),
+          //   child: TextFormField(
+          //       validator: (val) {
+          //         setState(() {
+          //           val.isEmpty ? error = true : error = false;
+          //         });
+          //         return null;
+          //       },
+          //       onTap: () {
+          //         setState(() {
+          //           error = false;
+          //         });
+          //       },
+          //       keyboardType: TextInputType.text,
+          //       decoration: InputDecoration(
+          //         contentPadding: EdgeInsets.all(10),
+          //         border: InputBorder.none,
+          //         focusedBorder: InputBorder.none,
+          //         enabledBorder: InputBorder.none,
+          //         errorBorder: InputBorder.none,
+          //         disabledBorder: InputBorder.none,
+          //         hintText:
+          //             error ? "Description can't be empty" : "Description",
+          //         errorMaxLines: 3,
+          //         hintStyle: TextStyle(
+          //             color:
+          //                 error ? Colors.deepOrangeAccent : Color(0xff62319E)),
+          //       )),
+          // ),
           SizedBox(
             height: 20,
           ),
           InkWell(
             onTap: () async {
               print(selectedIndex);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => PhoneVerification()));
-              // if(username.text.isEmpty||phoneNo.text.isEmpty||email.text.isEmpty||password.text.isEmpty||selectedIndex==-1)
-              // {
-              //   Toast.show(
-              //     "Please Enter Valid Details", 
-              //     context,
-              //     duration: 1,
-              //     gravity: 0,
-              //     backgroundColor: Colors.indigo[200]
-              //   );
-              // }
-              // //print(username.text.isEmpty);
-              // print(username.text);
-              // String result = await pushData(
-              //     username.text, email.text, password.text, phoneNo.text, selectedIndex);
-              // if (result.contains("success!")) {
-              //   Navigator.push(context,
-              //       MaterialPageRoute(builder: (context) => PhoneVerification()));
-              // }
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => PhoneVerification()));
+              if (username.text.isEmpty ||
+                  phoneNo.text.isEmpty ||
+                  email.text.isEmpty ||
+                  password.text.isEmpty ||
+                  selectedIndex == -1) {
+                return Toast.show("Please Enter Valid Details", context,
+                    duration: 1,
+                    gravity: 0,
+                    backgroundColor: Colors.indigo[200]);
+                    
+              }
+              print(username.text.isEmpty);
+              print("data sent");
+              http.Response result = await pushData(
+                  username.text.trim(), email.text.trim(), password.text.trim(), phoneNo.text.trim(), selectedIndex);
+              Map<String , dynamic> d = jsonDecode(result.body);
+                userId = d['type'];
+              if (result.statusCode == 200) {
+                print(result.body);
+                Navigator.pop(context);
+                Map<String , dynamic> d = jsonDecode(result.body);
+                userId = d[''];
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => PhoneVerification()));
+              }
+              else if(d['message'] == "Email already exists provider different email")
+              {
+                Navigator.pop(context);
+                return(
+                 showGeneralDialog(
+                  //barrierDismissible:true,
+                  barrierColor: Colors.black.withOpacity(0.5),
+                  transitionBuilder: (context, a1, a2, widget) {
+                    return Transform.scale(
+                      scale: a1.value,
+                      child: Opacity(
+                        opacity: a1.value,
+                        child: AlertDialog(
+                            title: Text("Email or Number already exist",
+                             style: TextStyle(fontSize: size.height*0.02))),
+                      ),
+                    );
+                  },
+                  transitionDuration: Duration(milliseconds: 300),
+                  barrierDismissible: true,
+                  barrierLabel: '',
+                  context: context,
+                  pageBuilder: (context, animation1, animation2) {})
+                );
+              }
+              else
+               {
+                 print(result.body);
+                 Navigator.pop(context);
+                  return(
+                  Toast.show("Please Enter Valid Details", context,
+                    duration: 1,
+                    gravity: 0,
+                    backgroundColor: Colors.indigo[200])
+                );
+               }
             },
             child: Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 0),

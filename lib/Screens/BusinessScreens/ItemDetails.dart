@@ -1,5 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:swap/global.dart';
+import 'package:convert/convert.dart';
 class ItemDetail extends StatefulWidget {
   @override
   _ItemDetailState createState() => _ItemDetailState();
@@ -83,7 +87,21 @@ class _ItemDetailState extends State<ItemDetail> {
                           splashColor: Colors.purple[200],
                             height: size.height*0.06,
                             color: Colors.purple,
-                            onPressed: (){},
+                            onPressed: ()async{
+                              final response = await http.post('$path/addToCart',
+                                headers: {
+                                  //HttpHeaders.contentTypeHeader: "application/json",
+                                  "Authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250YWN0TnVtYmVyIjoiNDIxNDIyNyIsInVzZXJJZCI6IjYwNjljYTYzZDgzNDkwMDAxN2EyN2I0ZCIsImRhdGUiOiIyMDIxLTA0LTA0VDE0OjQyOjA5LjIzNloiLCJpYXQiOjE2MTc1NDczMjl9.oi3qaowd3Ct0NP3fPzsemJaMTHqkstlasalnIN5oAIU"
+                                },
+                                body: jsonEncode({
+                                  'productId':'5fe875b6b72ad83b88ecce31'
+                                })
+                              );
+                              //Map<String , dynamic> details = jsonDecode(response.body);
+                              Map<String, dynamic> details= jsonDecode(response.body);
+                              print(details);
+                              print('response : ${response.body}');
+                            },
                             child: Text("Add to cart",  style: TextStyle(color: Colors.white))
                           )
           ]

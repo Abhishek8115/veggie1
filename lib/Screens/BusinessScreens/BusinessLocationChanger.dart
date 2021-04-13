@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 class LocationChanger extends StatefulWidget {
   @override
@@ -212,7 +213,6 @@ class _LocationChangerState extends State<LocationChanger> {
                         zoomValue = _value.toDouble();
                       });
                     },
-                    
                     semanticFormatterCallback: (double newValue) {
                       return '${newValue.round()} dollars';
                     })),

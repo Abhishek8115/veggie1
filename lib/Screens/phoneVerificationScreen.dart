@@ -7,7 +7,9 @@ import 'package:swap/Screens/UserScreens/UserDashboard.dart';
 import 'package:swap/global.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:swap/Screens/Donate/DonateDashboard.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'signup.dart';
 class PhoneVerification extends StatefulWidget {
   @override
   _PhoneVerificationState createState() => _PhoneVerificationState();
@@ -150,7 +152,21 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                       width: MediaQuery.of(context).size.width * 0.95,
                       height: 50,
                       child: RaisedButton(
-                        onPressed: () {
+                        onPressed: () async{
+                          // final response =
+                          // await http.post('https://foodswap-backend.herokuapp.com/verify',
+                          //     headers: {
+                          //       "Content-Type": "application/json"
+                          //       },
+                          //     body: jsonEncode({
+                          //       "otp":"1234",	
+                          //       "userId":userId,
+                          //       // "location":{
+                          //       //     "coordinates":[41.40338, 2.17403]
+                          //       //   }                                
+                          //     }));
+                          //     Map<String , dynamic> userDetails= jsonDecode(response.body);
+                          //     print(userDetails['token']);
                           if (selectedIndex == 0) {
                             Navigator.pushReplacement(
                                 context,
