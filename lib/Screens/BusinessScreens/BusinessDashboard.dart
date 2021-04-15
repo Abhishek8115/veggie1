@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:swap/Screens/BusinessScreens/BusinessOrders.dart';
 import 'package:swap/Screens/BusinessScreens/BusinessSupport.dart';
@@ -14,16 +16,87 @@ import 'package:swap/Screens/fresh_sale.dart';
 import 'package:swap/SplashScreen.dart';
 import 'package:swap/Models/DataSchema.dart';
 import 'BusinessEditProfile.dart';
+import 'dart:io';
+import 'package:swap/global.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+
 class BusinessDashboard extends StatefulWidget {
   @override
   _BusinessDashboardState createState() => _BusinessDashboardState();
 }
 
 class _BusinessDashboardState extends State<BusinessDashboard> {
+  bool loaderFlag = false;
+  Map<String, dynamic> userInfo;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  int itemCount =5;
+  Size size ; 
+  int itemCount = 5;
+  @override
+  void initState() {
+    // TODO: implement initState
+    loadUserDetails();
+    super.initState();
+
+  }
+  void loadUserDetails()async{
+    Directory directory = await getApplicationDocumentsDirectory(); 
+    File file2 = File('${directory.path}/userId.txt');
+    File file3 = File('${directory.path}/token.txt');
+    showGeneralDialog(
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionBuilder: (context, a1, a2, widget) {
+        return Transform.scale(
+          scale: a1.value,
+          child: Opacity(
+            opacity: a1.value,
+            child: AlertDialog(
+            title:Row( 
+              children:<Widget>[
+                CircularProgressIndicator(
+                  backgroundColor: Colors.indigo, 
+                  //valueColor: _animationController.drive(ColorTween(begin: Colors.indigo, end: Colors.deepPurple[100])),                  
+                  strokeWidth: 6.0,
+                ),
+                SizedBox(width: size.width*0.1),
+                Text("Loading")
+              ]
+            )
+          ),
+          ),
+        );
+      },
+      transitionDuration: Duration(milliseconds: 300),
+      barrierDismissible: false,
+      barrierLabel: '',
+      context: context,
+      pageBuilder: (context, animation1, animation2) {}
+    );
+    String userId = await file2.readAsString();
+    String token = await file3.readAsString();
+    print(token);
+    print(userId);
+    http.Response response = await http.get(
+      "${path}/profile/${userId}",
+      headers: {
+        "Content-Type":"application/json",
+        "Accept":"application/json",
+        "Authorization":"Bearer $token"
+      }  
+    );
+    userInfo = jsonDecode(response.body);
+    print(userInfo);
+    Navigator.pop(context);
+    loaderFlag = true;
+    setState(() {});
+  }
+  void loadProductDetails()
+  {
+    
+  }
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
       drawer: Drawer(
@@ -32,7 +105,6 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
           SizedBox(
             height: 30,
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -42,24 +114,25 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
                 backgroundColor: Colors.transparent,
                 child: Image.asset('assets/user.png'),
               ),
-              Column(
+              loaderFlag?Column(
                 children: [
                   Text(
-                    "Name",
+                    userInfo['data']['profile']['name'],
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 18),
                   ),
                   Text(
-                    "Business Owner",
+                    userInfo['data']['profile']['role'],
                     style: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.normal,
                         fontSize: 16),
                   )
                 ],
-              )
+              ):
+              Text("Loading...", style:TextStyle(color: Colors.black54))
             ],
           ),
 

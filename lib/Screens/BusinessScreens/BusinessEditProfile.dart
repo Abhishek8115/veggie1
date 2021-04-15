@@ -16,7 +16,7 @@ class _EditPostState extends State<BusinessEditProfile> with TickerProviderState
   File tempImage;
   PickedFile  _image;
   
-
+  bool name = true, address = true, deliveryCost = true, bio = true;
   List<bool> flags = [
     false,
     false,
@@ -187,9 +187,11 @@ class _EditPostState extends State<BusinessEditProfile> with TickerProviderState
               label: Text("Change location", 
                 style: TextStyle(fontSize: size.height*0.025))),
           ),
+          name?
+          Text("Name ", style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black54,)):
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             height: MediaQuery.of(context).size.height * 0.07,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -222,6 +224,39 @@ class _EditPostState extends State<BusinessEditProfile> with TickerProviderState
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            height: MediaQuery.of(context).size.height * 0.07,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.black54)),
+            child: TextFormField(
+                validator: (val) {
+                  setState(() {
+                    //val.isEmpty ? error = true : error = false;
+                  });
+                  return null;
+                },
+                onTap: () {
+                  setState(() {
+                   
+                  });
+                },
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(0),
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  hintText:"Change Address",
+                  errorMaxLines: 3,                      
+                  hintStyle: TextStyle(
+                      color: Colors.black54,
+                      fontSize: size.height*0.02),                        
+                )),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             height: MediaQuery.of(context).size.height * 0.07,
             decoration: BoxDecoration(
@@ -246,7 +281,7 @@ class _EditPostState extends State<BusinessEditProfile> with TickerProviderState
                   enabledBorder: InputBorder.none,
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
-                  hintText:"Add Delivery Cost",
+                  hintText:"Change Delivery Cost",
                   errorMaxLines: 3,                      
                   hintStyle: TextStyle(
                       color: Colors.black54,
@@ -255,7 +290,7 @@ class _EditPostState extends State<BusinessEditProfile> with TickerProviderState
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             height: MediaQuery.of(context).size.height * 0.25,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -273,7 +308,7 @@ class _EditPostState extends State<BusinessEditProfile> with TickerProviderState
                   enabledBorder: InputBorder.none,
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
-                  hintText:"Change Description",
+                  hintText:"Change Bio",
                   errorMaxLines: 3,                      
                   hintStyle: TextStyle(
                       color: Colors.black54,
